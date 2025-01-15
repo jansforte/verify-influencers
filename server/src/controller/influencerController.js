@@ -1,6 +1,7 @@
 const {analyzeText} = require("../service/openaiService");
 const {searchTwitter} = require("../service/twitterService");
 
+//Consultamos los twitts del influencer y preguntamos a chatgpt
 exports.processIncluencer = async (req, res, next) => {
     const { username } = req.query;
     try {
