@@ -6,8 +6,9 @@ exports.processIncluencer = async (req, res, next) => {
     const { username } = req.query;
     try {
         const tweets = await searchTwitter(username);
-        const healthClaims = await Promise.all(tweets.map(tweet => analyzeText(tweet.text)));
-        res.json({ username, healthClaims });
+        
+        // const healthClaims = await Promise.all(tweets.map(tweet => analyzeText(tweet.text)));
+        res.json({username: username });
     } catch (error) {
         next(error);
     }

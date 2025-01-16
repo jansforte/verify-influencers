@@ -2,12 +2,13 @@ const client = require("../config/twitter");
 
 exports.searchTwitter = async(username)=>{
     
-    const jsTweets = await client.v2.search(
-        `from:${username} -is:retweet`);
+    const {data} = await client.v2.search(
+        `from:${username}`);
+    console.log(data);
     // Consume every possible tweet of jsTweets (until rate limit is hit)
-    for await (const tweet of jsTweets) {
-        console.log(tweet);
-    }
+    // for await (const tweet of data.data) {
+    //     console.log(tweet.text);
+    // }
 
-    return jsTweets;
+    return data.data;
 }
