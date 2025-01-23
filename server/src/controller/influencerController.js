@@ -81,10 +81,10 @@ exports.processIncluencer = async (req, res, next) => {
             filter
             );
         if(healthClaims){
-            res.json({username: username, data: healthClaims, count: healthClaims.length});
+            res.status(200).json({username: username, data: healthClaims, count: healthClaims.length});
         }
         else{            
-            res.json({username: username, data: "no se encontraron tweets", count: 0});
+            res.status(200).json({username: username, data: "no se encontraron tweets", count: 0});
         }
     } catch (error) {
         next(error);

@@ -3,12 +3,15 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const {default:helmet} = require("helmet");
+const cors = require('cors');
+
 const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 dotenv.config();
+app.use(cors());
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(bodyParser.json());

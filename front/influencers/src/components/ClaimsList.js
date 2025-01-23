@@ -1,27 +1,28 @@
 import React from 'react';
 
 const ClaimsList = ({ claims }) => {
-    if (claims.length === 0) {
+    
+    if (claims.count === 0 || claims.length === 0) {
         return <p>No se encontraron resultados.</p>;
     }
-
+    
     return (
-        <table border="1" style={{ width: '100%', textAlign: 'left', marginTop: '20px' }}>
+        <table className='table table-dark table-hover' width={100}>
             <thead>
                 <tr>
                     <th>Influencer</th>
-                    <th>Claim</th>
+                    <th>Tweet</th>
                     <th>Estado</th>
                     <th>Confianza</th>
                 </tr>
             </thead>
             <tbody>
-                {claims.map((claim) => (
+                {claims.data.map((claim) => (
                     <tr key={claim._id}>
                         <td>{claim.influencer}</td>
-                        <td>{claim.claim}</td>
-                        <td>{claim.status}</td>
-                        <td>{claim.confidence}%</td>
+                        <td>{claim.tweet}</td>
+                        <td>{claim.confidence === 1 ? "Verified" : claim.confidence === 2 ? "Questionable" : "Debunked" }</td>
+                        <td>{claim.score}%</td>
                     </tr>
                 ))}
             </tbody>

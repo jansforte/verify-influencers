@@ -7,10 +7,10 @@ exports.searchTwitter = async(username,start_time,end_time)=>{
     }
 
     if (start_time) {
-        params.start_time = new Date(start_time).toISOString() ;
+        params['start_time'] = new Date(start_time).toISOString() ;
     }
     if (end_time) {
-        params.end_time =  new Date(end_time).toISOString() ;
+        params['end_time'] =  new Date(end_time).toISOString() ;
     }
 
     const {data} = await client.v2.search(
