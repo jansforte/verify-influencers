@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import ClaimSearch from './components/ClaimSearch';
+import ClaimsList from './components/ClaimsList';
+import { fetchClaims } from './api';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [claims, setClaims] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const handleSearch = async (influencer, claimText) => {
+        setLoading(true);
+        try {
+            const results = await fetchClaims(influencer, claimText);
+            setClaims(results);
+        } catch (error) {
+            console.error('Error fetching claims:', error);
+            alert('Error al obtener resultados');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div style={{ padding: '20px' }}>
+            <h1>Buscar Claims de Influencers</h1>
+            <ClaimSearch onSearch={handleSearch} />
+            {loading ? <p>Cargando...</p> : <ClaimsList claims={claims} />}
+        </div>
+    );
+};
 
 export default App;
