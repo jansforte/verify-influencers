@@ -1,27 +1,42 @@
 const openai = require("../config/openAI");
 
-const analyzeText = async (text) => {
+const analyzeText = async (tweets) => {
     try {
-        const response = await openai.createCompletion({
-            model: 'text-davinci-003',
-            prompt: `Identifica afirmaciones de salud en el siguiente texto:\n${text}`,
-            max_tokens: 500,
+        const response = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            messages: [
+                {
+                    role: 'developer',
+                    content: `según al siguiente array JSON: ${tweets} .
+                    quiero que valides cada key "tweet" si identificas afirmaciones de salud 
+                    y solo respondeme con el array con un key más denominado "isHealth" donde pondras en valor boolean
+                    si identificaste afirmación de salud`
+                }
+            ],
+            max_tokens: 1100,
         });
-        return response.data.choices[0].text.trim();
+        return response.choices[0].message.content.trim().replace(/^```json\n/, '').replace(/```/,'');
     } catch (error) {
         console.error('Error analyzing text:', error.message);
         throw error;
     }
 };
 
-const verifyClaim = async (claim) => {
+const verifyClaim = async (tweets) => {
     try {
-        const response = await openai.createCompletion({
-            model: 'text-davinci-003',
-            prompt: `Verifica la siguiente afirmación de salud con fuentes científicas confiables:\n"${claim}"\nDevuelve si es "Verificado", "Cuestionable" o "Desmentido" y un puntaje de confianza del 1 al 100.`,
-            max_tokens: 200,
+        const response = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            messages: [{
+                role:'developer',
+                content:`según al siguiente array JSON: ${tweets} .
+                Verifica cada key "tweet" con fuentes científicas confiables,
+                y solo respondeme con el array con dos key más denominado "confidence" y "score". Para "confidence" pondrás un valor de 1 a 3, 
+                siendo 1 si es "Verified", 2 si es "Questionable" y 3 si es "Debunked";
+                Para "score" asigna un puntaje de confianza del 1 al 100. Recuerda los valores lo asignas segun lo investigado con fuentes científicas y solo respondeme con el array sin explicación`}],
+
+            max_tokens: 1100,
         });
-        return response.data.choices[0].text.trim();
+        return response.choices[0].message.content.trim().replace(/^```json\n/, '').replace(/```/,'');
     } catch (error) {
         console.error('Error verifying claim:', error.message);
         throw error;
